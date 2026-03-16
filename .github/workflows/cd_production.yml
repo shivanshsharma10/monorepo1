@@ -1,0 +1,31 @@
+name: Deploys to staging
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  redeploy_everything:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2
+        run: |
+          echo "${{ secrets.SSH_KEY }}" > ~/ssh_key
+          chmod 600 ~/ssh_key
+
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@ec2-65-0-103-42.ap-south-1.compute.amazonaws.com << 'EOF'
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            export PATH="$HOME/.local/share/pnpm:$PATH"
+
+            cd monorepo1
+            git pull origin production
+            pnpm install
+            pnpm run build
+            pm2 restart fe-server
+            pm2 restart http-server
+            pm2 restart ws-server
+          EOF
