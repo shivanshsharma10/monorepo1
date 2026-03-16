@@ -9,7 +9,7 @@ wss.on('connection', async function connection(ws) {
   // Example: Count total users and send it to the client
   const count = await prisma.member.count();
   ws.send(`Welcome! Total members in DB: ${count}`);
-
+  
   ws.on('message', (data) => {
     console.log('received: %s', data);
   });
