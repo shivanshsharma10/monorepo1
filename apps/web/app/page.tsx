@@ -5,7 +5,7 @@ export default async function Page() {
 
   return (
     <div>
-      <h1>Users from Render DB</h1>
+      <h1>Users from Render DB are..</h1>
       <pre>{JSON.stringify(users, null, 2)}</pre>
     </div>
   );
