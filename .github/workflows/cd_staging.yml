@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name : SSH Into server
-        run:
+        run: |
           echo ${{secrets.SSH_KEY}} &> ~/ssh_key
           ssh -i ~/ssh_key ubuntu@ec2-13-235-248-144.ap-south-1.compute.amazonaws.com
           cd monorepo1
