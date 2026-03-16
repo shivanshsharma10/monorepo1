@@ -1,26 +1,26 @@
-name : Deploys to staging 
+name: Deploys to staging
+
 on:
   push:
     branches:
       - main
 
 jobs:
-  
   redeploy_everything:
     runs-on: ubuntu-latest
-    name: Deploying everything to thr staging cluster
+    name: Deploying everything to the staging cluster
 
     steps:
-      - name : SSH Into server
+      - name: Deploy to EC2
         run: |
-          echo ${{secrets.SSH_KEY}} &> ~/ssh_key
+          echo "${{ secrets.SSH_KEY }}" > ~/ssh_key
           chmod 600 ~/ssh_key
+
           ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@ec2-13-235-248-144.ap-south-1.compute.amazonaws.com << 'EOF'
             cd monorepo1
-           cd monorepo1
-           pnpm install
-           pnpm run build
-           pm2 restart fe-server
-           pm2 restart http-server
-           pm2 restart ws-server
-          EOF 
+            pnpm install
+            pnpm run build
+            pm2 restart fe-server
+            pm2 restart http-server
+            pm2 restart ws-server
+          EOF
