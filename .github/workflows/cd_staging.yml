@@ -14,8 +14,9 @@ jobs:
       - name : SSH Into server
         run: |
           echo ${{secrets.SSH_KEY}} &> ~/ssh_key
-           chmod 600 ~/ssh_key
-          ssh -i ~/ssh_key ubuntu@ec2-13-235-248-144.ap-south-1.compute.amazonaws.com
+          chmod 600 ~/ssh_key
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@ec2-13-235-248-144.ap-south-1.compute.amazonaws.com << 'EOF'
+            cd monorepo1
            cd monorepo1
            pnpm install
            pnpm run build
